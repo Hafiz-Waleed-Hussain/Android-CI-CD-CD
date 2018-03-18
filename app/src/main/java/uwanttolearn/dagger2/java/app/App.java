@@ -11,7 +11,7 @@ import uwanttolearn.dagger2.java.repositories.github.GitHubServiceGenerator;
  * Created by waleed on 22/07/2017.
  */
 
-public class App extends Application {gi
+public class App extends Application {
 
 
     private static App app;
