@@ -1,0 +1,76 @@
+apply plugin: 'com.android.application'
+// Kotlin related dependencies
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
+    defaultConfig {
+        applicationId "uwanttolearn.dagger2"
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    // Currently Added for Retro lambda
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:26.0.2'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile 'junit:junit:4.12'
+
+    // Retrofit 2 for API call's
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+
+    // JSON Converter. Which I used with Retrofit.
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    // Rx Java 2. I used for callback in adapters + with retrofit.
+    compile 'io.reactivex.rxjava2:rxjava:2.0.2'
+
+    // Rx Android mostly used for AndroidSchedulers.mainThread()
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
+    // Retrofit 2 work with Rx Java2. Only we need to add below adapter to make a connection
+    // between these two libs
+    compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
+
+    // This is very useful to show all the response from the API to Logcat.
+    compile 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+
+    // Dagger 2
+    compile 'com.google.dagger:dagger:2.11'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+
+    // Dagger 2 with Kotlin
+    kapt 'com.google.dagger:dagger-compiler:2.11'
+
+    compile 'com.github.bumptech.glide:glide:3.8.0'
+
+    compile 'com.android.support:recyclerview-v7:26.0.2'
+    compile 'com.android.support:cardview-v7:26.0.2'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
+}
