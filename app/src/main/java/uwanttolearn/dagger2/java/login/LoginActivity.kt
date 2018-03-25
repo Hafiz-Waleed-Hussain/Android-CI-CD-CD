@@ -39,11 +39,11 @@ class LoginActivity : AppCompatActivity(), LoginViewContract {
             passwordEditText.text.toString())
 
 
-    override fun showEmptyUsernameError() = showToast("Enter username")
+    override fun showEmptyUsernameError() = showToast(getString(R.string.enter_username))
 
-    override fun showEmptyPasswordError() = showToast("Enter password")
+    override fun showEmptyPasswordError() = showToast(getString(R.string.enter_password))
 
-    override fun showSomethingWentWrong() = showToast("Something went wrong. Please try later.")
+    override fun showSomethingWentWrong() = showToast(getString(R.string.something_went_wrong))
 
     override fun startHomeActivity() = startActivityWithFinish<HomeActivity>()
 
