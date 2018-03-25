@@ -13,15 +13,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
         <activity
-            android:name=".java.home.HomeActivity"
+            android:name=".java.login.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+        <activity
+            android:name=".java.home.HomeActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".java.detail.DetailActivity"
             android:screenOrientation="portrait" />
