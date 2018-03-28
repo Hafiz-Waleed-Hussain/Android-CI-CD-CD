@@ -11,24 +11,28 @@ import uwanttolearn.dagger2.java.home.HomeActivity
 
 /**
  * Created by waleed on 20/03/2018.
+ * I am adding this text. So git can feel a change in the code :) and give a permission to create a
+ * pull request.
  */
 
 // Top Level and Extension functions
+
 inline fun <reified T> AppCompatActivity.startActivityWithFinish() {
     finish()
+
     startActivity(Intent(this, T::class.java))
 }
 
 
 // LoginActivity
 
+
 class LoginActivity : AppCompatActivity(), LoginViewContract {
 
     private val presenter: LoginPresenter by lazy { LoginPresenter(this, LoginRepo()) }
     private val usernameEditText: EditText by lazy { findViewById<EditText>(R.id.LoginActivity_username_edit_text) }
     private val passwordEditText: EditText by lazy { findViewById<EditText>(R.id.LoginActivity_password_edit_text) }
-
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -88,3 +92,4 @@ class LoginRepo : LoginDataSource {
     }
 
 }
+
