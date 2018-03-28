@@ -1,6 +1,9 @@
 package uwanttolearn.dagger2.java.login
 
 
+import android.support.annotation.IdRes
+import android.support.annotation.IntDef
+import android.support.annotation.StringRes
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.ViewInteraction
 import android.support.test.rule.ActivityTestRule
@@ -29,46 +32,54 @@ import android.support.test.espresso.matcher.ViewMatchers.withText
 import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.RootMatchers.withDecorView
 import android.support.test.espresso.Espresso.onView
+import android.support.test.espresso.ViewAction
+import android.support.test.espresso.ViewAssertion
+import android.support.test.espresso.action.ViewActions
+import android.support.test.espresso.assertion.ViewAssertions
+import android.support.test.espresso.intent.Intents
+import android.support.test.espresso.intent.matcher.IntentMatchers
 import org.hamcrest.Matchers.*
+import uwanttolearn.dagger2.java.home.HomeActivity
 
 
-@Suppress("IllegalIdentifier")
+//@Suppress("IllegalIdentifier")
 @RunWith(AndroidJUnit4::class)
 class LoginActivityTest {
 
-    @Rule
-    var mActivityTestRule = ActivityTestRule(LoginActivity::class.java)
+    @get:Rule
+    val mActivityTestRule = ActivityTestRule(LoginActivity::class.java)
 
     @Test
-    fun `when login click with empty username should  show username empty Toast`(){
+    fun whenLoginClickWithEmptyUsernameShouldShowUsernameEmptyToast(){
         Espresso.onView(ViewMatchers.withId(R.id.button)).perform(click())
-
-        onView(withText(R.string.enter_username)).inRoot(withDecorView(not(`is`(mActivityTestRule.activity.window.decorView)))).check(matches(isDisplayed()))
+        toastIsDisplayed(R.string.enter_username)
     }
 
-    //    @Test
-    //    public void loginActivityTest() {
-    //        ViewInteraction appCompatButton = onView(
-    //                allOf(withId(R.id.button), withText("Login"),
-    //                        childAtPosition(
-    //                                childAtPosition(
-    //                                        withId(android.R.id.content),
-    //                                        0),
-    //                                2),
-    //                        isDisplayed()));
-    //        appCompatButton.perform(click());
-    //
-    //        ViewInteraction viewGroup = onView(
-    //                allOf(childAtPosition(
-    //                        allOf(withId(android.R.id.content),
-    //                                childAtPosition(
-    //                                        withId(R.id.decor_content_parent),
-    //                                        1)),
-    //                        0),
-    //                        isDisplayed()));
-    //        viewGroup.check(matches(isDisplayed()));
-    //
-    //    }
+    @Test
+    fun whenLoginClickWithEmptyPasswordShouldShowPasswordEmptyToast(){
+        Espresso.onView(ViewMatchers.withId(R.id.LoginActivity_username_edit_text))
+                .perform(ViewActions.typeText("Hafiz"))
+        Espresso.onView(ViewMatchers.withId(R.id.button)).perform(click())
+        toastIsDisplayed(R.string.enter_password)
+    }
 
+    @Test
+    fun whenLoginClickWithValidCredentialsShouldOpenHomeScreen() {
+        fun input(text:String,@IdRes id: Int){
+            Espresso.onView(ViewMatchers.withId(id))
+                    .perform(ViewActions.typeText(text))
+        }
+        input("Hafiz", R.id.LoginActivity_username_edit_text)
+        input("123456", R.id.LoginActivity_password_edit_text)
+        Espresso.onView(ViewMatchers.withId(R.id.button)).perform(click())
+
+        Espresso.onView(ViewMatchers.withId(R.id.MainActivity_recycler_view))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+    }
+
+    private fun toastIsDisplayed(@StringRes stringId: Int){
+        Thread.sleep(1000)
+        onView(withText(stringId)).inRoot(withDecorView(not(`is`(mActivityTestRule.activity.window.decorView)))).check(matches(isDisplayed()))
+    }
 
 }
