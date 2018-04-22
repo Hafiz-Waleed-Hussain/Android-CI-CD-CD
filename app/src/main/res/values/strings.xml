@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Dagger 2</string>
+    <string name="enter_username">Enter username</string>
+    <string name="enter_password">Enter password</string>
+    <string name="something_went_wrong">Something went wrong. Please try later.</string>
 </resources>
