@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'jacoco'
+
 android {
     compileSdkVersion 26
     buildToolsVersion '27.0.3'
@@ -23,12 +25,31 @@ android {
     }
 
     buildTypes {
+
+        debug{
+            testCoverageEnabled true
+            debuggable true
+        }
+
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
+    testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
+    }
+
+}
+
+jacoco {
+    toolVersion "0.7.1.201405082137"
 }
 
 dependencies {
@@ -85,4 +106,109 @@ dependencies {
 }
 repositories {
     mavenCentral()
+}
+
+
+project.afterEvaluate {
+    // Grab all build types and product flavors
+    def buildTypes = android.buildTypes.collect { type ->
+        type.name
+    }
+
+    def productFlavors = android.productFlavors.collect { flavor ->
+        flavor.name
+    }
+    // When no product flavors defined, use empty
+    if (!productFlavors) productFlavors.add('')
+
+    //iterate over the flavors
+
+    productFlavors.each {
+
+        productFlavorName ->
+//iterate over build types like debug,release,prod etc.
+            buildTypes.each {
+
+                buildTypeName ->
+                    //sourceNameâ€Šâ€” e.g. freeDebug ,sourcePathâ€Šâ€”â€Še.g. free/debug
+                    def sourceName, sourcePath
+                    if (!productFlavorName) {
+                        sourceName = sourcePath = "${buildTypeName}"
+                    } else {
+                        sourceName = "${productFlavorName}${buildTypeName.capitalize()}"
+                        sourcePath = "${productFlavorName}/${buildTypeName}"
+                    }
+                    // testTaskNameâ€Šâ€”â€Š e.g. testFreeDebugtest task that the coverage task depends on,
+                    def testTaskName = "test${sourceName.capitalize()}UnitTest"
+                    // Create coverage task of form 'testFlavorTypeCoverage' depending on 'testFlavorTypeUnitTest'
+                    task "${testTaskName}Coverage"(type: JacocoReport, dependsOn: "$testTaskName") {
+                        group = "Reporting"
+                        description = "Generate Jacoco coverage reports on the ${sourceName.capitalize()} build."
+                        classDirectories = fileTree(
+                                dir: "${project.buildDir}/intermediates/classes/${sourcePath}",
+                                excludes: [
+                                        '**/R.class',
+                                        '**/R$*.class',
+                                        '**/*$ViewInjector*.*',
+                                        '**/*$ViewBinder*.*',
+                                        '**/BuildConfig.*',
+                                        '**/Manifest*.*',
+                                        'android/**/*.*',
+                                        '**/Lambda$*.class', //Retrolambda
+                                        '**/Lambda.class',
+                                        '**/ * Lambda.class',
+                                        '**/*Lambda*.class',
+                                        '**/*Lambda*.*',
+                                        '**/*Builder.*',
+                                        '**/*_MembersInjector.class', //Dagger2 generated code
+                                        '**/*_MembersInjector*.*', //Dagger2 generated code
+                                        '**/ *_ * Factory*. * ', //Dagger2 generated code
+                                        '**/*Component*.*', //Dagger2 generated code
+                                        '**/*Module*.*', //Dagger2 generated code
+                                        'io/**/*.*'
+                                ],
+                               // include: []
+                        ) + fileTree(
+                                dir:"${project.buildDir}/tmp/kotlin-classes/${sourcePath}",
+                                excludes: [
+                                        '**/R.class',
+                                        '**/R$*.class',
+                                        '**/*$ViewInjector*.*',
+                                        '**/*$ViewBinder*.*',
+                                        '**/BuildConfig.*',
+                                        '**/Manifest*.*',
+                                        'android/**/*.*',
+                                        '**/Lambda$*.class', //Retrolambda
+                                        '**/Lambda.class',
+                                        '**/ * Lambda.class',
+                                        '**/*Lambda*.class',
+                                        '**/*Lambda*.*',
+                                        '**/*Builder.*',
+                                        '**/*_MembersInjector.class', //Dagger2 generated code
+                                        '**/*_MembersInjector*.*', //Dagger2 generated code
+                                        '**/ *_ * Factory*. * ', //Dagger2 generated code
+                                        '**/*Component*.*', //Dagger2 generated code
+                                        '**/*Module*.*', //Dagger2 generated code
+                                        'io/**/*.*'
+                                ],
+                                // include: []
+                        )
+
+
+                        def coverageSourceDirs = [
+                                "src/main/java",
+                                "src/$productFlavorName/java",
+                                "src/$buildTypeName/java"
+                        ]
+                        additionalSourceDirs = files(coverageSourceDirs)
+                        sourceDirectories = files(coverageSourceDirs)
+                        executionData = files("${project.buildDir}/jacoco/${testTaskName}.exec")
+                        reports {
+                            //enables and disable the type of file you need
+                            xml.enabled = false
+                            html.enabled = true
+                        }
+                    }
+            }
+    }
 }
