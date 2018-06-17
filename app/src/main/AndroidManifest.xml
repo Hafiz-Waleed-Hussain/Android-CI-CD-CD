@@ -32,6 +32,9 @@
             android:name=".java.detail.DetailActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".kotlin.home.KotlinHomeActivity"></activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="53c4ef7cef97fe0d09656ee484aeccd15b7a6639" />
     </application>
 
 </manifest>
