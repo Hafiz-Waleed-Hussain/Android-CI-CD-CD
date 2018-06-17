@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.bumptech.glide.Glide;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import uwanttolearn.dagger2.java.repositories.github.GitHubRepository;
 import uwanttolearn.dagger2.java.repositories.github.GitHubServiceGenerator;
 
@@ -20,6 +22,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         app = this;
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this, "https://api.github.com"))
