@@ -26,7 +26,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        ext.betaDistributionEmails = "hafizwaleedhussain@gmail.com"
+        ext.betaDistributionEmails = "hafizwaleedhussain@yahoo.com"
         ext.betaDistributionReleaseNotes = "Release notes are available on Jenkins :)"
 
     }
