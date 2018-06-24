@@ -20,7 +20,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion '27.0.3'
     defaultConfig {
-        applicationId "uwanttolearn.dagger2"
+        applicationId "com.silence_shout"
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 1
