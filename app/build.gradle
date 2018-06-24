@@ -23,7 +23,7 @@ android {
         applicationId "com.silence_shout"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 1
+        versionCode getCustomVersionCode()
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -227,4 +227,9 @@ project.afterEvaluate {
                     }
             }
     }
+}
+
+def getCustomVersionCode() {
+    def date = new Date()
+    return Integer.valueOf(System.env.BUILD_NUMBER ?: date.format('yyMMddHHmm'))
 }
