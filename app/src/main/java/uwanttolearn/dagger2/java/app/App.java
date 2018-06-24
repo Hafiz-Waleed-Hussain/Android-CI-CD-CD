@@ -22,7 +22,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
+//        Fabric.with(this, new Crashlytics());
         app = this;
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this, "https://api.github.com"))
